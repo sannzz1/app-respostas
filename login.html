@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+</head>
+<body>
+  <h2>Página de Login</h2>
+  <form id="loginForm">
+    <label for="usuario">Usuário:</label>
+    <input type="text" id="usuario" required>
+    <br>
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" required>
+    <br>
+    <button type="submit">Entrar</button>
+  </form>
+  <p id="mensagemErro" style="color: red;"></p>
+
+  <script>
+    const url = "https://script.google.com/macros/s/AKfycbzymGq8FhtKqo5mZKYgmXDznn8dQxahiFFHceItramj0OQ3WtParA6EdkwuqhLfHUcr/exec";
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const usuario = document.getElementById('usuario').value;
+      const senha = document.getElementById('senha').value;
+
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify({usuario: usuario, senha: senha}),
+        headers: {"Content-Type": "application/json"}
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.login) {
+          // Sucesso: redireciona para o menu
+          window.location.href = "menu.html";
+        } else {
+          document.getElementById('mensagemErro').textContent = data.mensagem;
+        }
+      })
+      .catch(() => {
+        document.getElementById('mensagemErro').textContent = "Erro ao conectar. Tente novamente!";
+      });
+    });
+  </script>
+</body>
+</html>
